@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki</title>
+    <style>
+        .nav-menu {
+            background-color: #f8f9fa;
+            padding: 1rem;
+        }
+
+        .search-container {
+            margin: 1rem;
+        }
+
+        .wiki-content {
+            margin: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav-menu">
+        <ul id="navMenu">
+            <!-- Les liens de navigation seront générés ici -->
+        </ul>
+    </nav>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Rechercher un sujet...">
+        <button onclick="searchWiki()">Rechercher</button>
+    </div>
+
+    <div class="wiki-content" id="wikiContent">
+        <!-- Le contenu du wiki sera affiché ici -->
+    </div>
+
+    <script>
+
+        const pages = [
+            { id: "accueil", title: "Accueil" },
+            { id: "articles", title: "Articles" },
+            { id: "categories", title: "Catégories" },
+            // Ajoutez plus de pages ici
+        ];
+
+        function generateNavMenu() {
+            const navMenu = document.getElementById('navMenu');
+            pages.forEach(page => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `#${page.id}`;
+                a.textContent = page.title;
+                li.appendChild(a);
+                navMenu.appendChild(li);
+            });
+        }
+
+        function searchWiki() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const wikiContent = document.getElementById('wikiContent');
+            wikiContent.innerHTML = '';
+
+            const filteredArticles = articles.filter(article => 
+                article.title.toLowerCase().includes(searchInput) || 
+                article.content.toLowerCase().includes(searchInput)
+            );
+
+            if (filteredArticles.length > 0) {
+                filteredArticles.forEach(article => {
+                    const articleElement = document.createElement('div');
+                    articleElement.innerHTML = `<h2>${article.title}</h2><p>${article.content}</p>`;
+                    wikiContent.appendChild(articleElement);
+                });
+            } else {
+                wikiContent.innerHTML = '<p>Aucun article trouvé.</p>';
+            }
+        }
+
+        // Générer le menu de navigation au chargement de la page
+        document.addEventListener('DOMContentLoaded', generateNavMenu);
+    </script>
+    <style>
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        body.dark-mode .nav-menu {
+            background-color: #333;
+        }
+
+        body.dark-mode a {
+            color: #ffffff;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+        }
+    </style>
+
+    <button class="theme-toggle" onclick="toggleTheme()">Mode sombre</button>
+
+    <script>
+        let isDarkMode = false;
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('.theme-toggle').textContent =
+                isDarkMode ? 'Mode clair' : 'Mode sombre';
+        }
+
+        // Chargement des pages depuis des fichiers HTML
+        async function loadPage(pageName) {
+            try {
+                const response = await fetch(`pages/${pageName}.html`);
+                if (!response.ok) throw new Error('Page non trouvée');
+                const content = await response.text();
+                document.getElementById('wikiContent').innerHTML = content;
+            } catch (error) {
+                document.getElementById('wikiContent').innerHTML =
+                    '<p>Erreur: Page non trouvée</p>';
+            }
+        }
+
+        // Gestion de la navigation
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = e.target.href.split('#')[1];
+                loadPage(page);
+            });
+        });
+
+        // Charger la page d'accueil par défaut
+        loadPage('accueil');
+    </script>
+</body>
+
+</html>
