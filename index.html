@@ -26,13 +26,13 @@
     </nav>
   </header>
   <section>
-    <input type="text" class="search" placeholder="Search for commands or mods... (type the command name)" oninput="filterResults(event)">
+    <input type="text" class="search" placeholder="Search for commands or mods... (type the command name without the /)" oninput="filterResults(event)">
     <ul id="results"></ul>
   </section>
   <footer>
     &copy; 2025 TerraMine Wiki. All rights reserved.
     <p>Powered by O.P.</p>
-    <a href="index.html">Home</a>
+    <a href="/wiki/index.html">Home</a>
   </footer>
   <script>
     const data = [
@@ -42,6 +42,7 @@
       { type: "command", name: "spawn", url: "commands/tpr.html"},
       { type: "command", name: "shop", url: "commands/shop.html" },
       { type: "command", name: "sell", url: "commands/shop.html" },
+      { type: "command", name: "pay", url: "commands/pay.html" },
       { type: "command", name: "market", url: "commands/shop.html" },
       { type: "command", name: "buyer", url: "commands/shop.html" },
       { type: "items", name: "", url: "items/.html" },
