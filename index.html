@@ -26,7 +26,7 @@
     </nav>
   </header>
   <section>
-    <input type="text" class="search" placeholder="Search for commands or mods..." oninput="filterResults(event)">
+    <input type="text" class="search" placeholder="Search for commands or mods... (type the command name)" oninput="filterResults(event)">
     <ul id="results"></ul>
   </section>
   <footer>
@@ -36,8 +36,15 @@
   </footer>
   <script>
     const data = [
-      { type: "command", name: "", url: "commands/.html" },
-      { type: "items", name: "", url: "commands/.html" },
+      { type: "command", name: "teleport", url: "commands/tpr.html" },
+      { type: "command", name: "tpr", url: "commands/tpr.html"},
+      { type: "command", name: "rtp", url: "commands/tpr.html"},
+      { type: "command", name: "spawn", url: "commands/tpr.html"},
+      { type: "command", name: "shop", url: "commands/shop.html" },
+      { type: "command", name: "sell", url: "commands/shop.html" },
+      { type: "command", name: "market", url: "commands/shop.html" },
+      { type: "command", name: "buyer", url: "commands/shop.html" },
+      { type: "items", name: "", url: "items/.html" },
       { type: "nodes", name: "", url: "nodes/.html" },
       { type: "mapgen", name: "", url: "mapgen/.html" },
     ];
