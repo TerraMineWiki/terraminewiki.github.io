@@ -11,7 +11,7 @@
   <header>
     <h1><a href="/index.html" style="text-decoration: none; color: inherit;">TerraMine Wiki</a></h1>
     <nav>
-      <a href="commands/index.html">Commands</a>
+      <a href="/commands/index.html">/commands</a>
       <a href="/nodes/index.html">Blocks</a>
       <a href="/items/index.html">Items</a>
       <a href="/mods/index.html">Mods</a>
@@ -22,7 +22,7 @@
     </nav>
   </header>
   <section>
-    <input type="text" class="search" placeholder="Search for commands or mods... (type the command name without the /)" oninput="filterResults(event)">
+    <input type="text" class="search" placeholder="Search for /commands or mods... (type the command name without the /)" oninput="filterResults(event)">
     <ul id="results"></ul>
     <a style="color: brown;">Wiki completed at ~25%.</a>
     <a style="color: brown;">Stay tuned !</a>
@@ -30,44 +30,44 @@
   </section>
   <script>
     const data = [
-      { type: "command", name: "teleport", url: "commands/teleport.html" },
-      { type: "command", name: "tpr", url: "commands/teleport.html"},
-      { type: "command", name: "rtp", url: "commands/teleport.html"},
-      { type: "command", name: "spawn", url: "commands/teleport.html"},
-      { type: "command", name: "shop", url: "commands/shop.html" },
-      { type: "command", name: "sell", url: "commands/shop.html" },
-      { type: "command", name: "pay", url: "commands/economy.html" },
-      { type: "command", name: "market", url: "commands/shop.html" },
-      { type: "command", name: "buyer", url: "commands/shop.html" },
-      { type: "command", name: "home", url: "commands/home.html" },
-      { type: "command", name: "sethome", url: "commands/home.html" },
-      { type: "command", name: "balance", url: "commands/economy.html" },
-      { type: "command", name: "rewards", url: "commands/economy.html" },
-      { type: "command", name: "tpr_mute", url: "commands/teleport.html" },
-      { type: "command", name: "tpr_unmute", url: "commands/teleport.html" },
-      { type: "command", name: "tphr", url: "commands/teleport.html" },
-      { type: "command", name: "cltime", url: "commands/othercmds.html"},
-      { type: "command", name: "jobs", url: "commands/othercmds.html"},
-      { type: "command", name: "homes", url: "commands/homes.html"},
-      { type: "command", name: "craft", url: "commands/craft.html"},
+      { type: "command", name: "teleport", url: "/commands/teleport.html" },
+      { type: "command", name: "tpr", url: "/commands/teleport.html"},
+      { type: "command", name: "rtp", url: "/commands/teleport.html"},
+      { type: "command", name: "spawn", url: "/commands/teleport.html"},
+      { type: "command", name: "shop", url: "/commands/shop.html" },
+      { type: "command", name: "sell", url: "/commands/shop.html" },
+      { type: "command", name: "pay", url: "/commands/economy.html" },
+      { type: "command", name: "market", url: "/commands/shop.html" },
+      { type: "command", name: "buyer", url: "/commands/shop.html" },
+      { type: "command", name: "home", url: "/commands/home.html" },
+      { type: "command", name: "sethome", url: "/commands/home.html" },
+      { type: "command", name: "balance", url: "/commands/economy.html" },
+      { type: "command", name: "rewards", url: "/commands/economy.html" },
+      { type: "command", name: "tpr_mute", url: "/commands/teleport.html" },
+      { type: "command", name: "tpr_unmute", url: "/commands/teleport.html" },
+      { type: "command", name: "tphr", url: "/commands/teleport.html" },
+      { type: "command", name: "cltime", url: "/commands/othercmds.html"},
+      { type: "command", name: "jobs", url: "/commands/othercmds.html"},
+      { type: "command", name: "homes", url: "/commands/homes.html"},
+      { type: "command", name: "craft", url: "/commands/craft.html"},
       { type: "items", name: "Gear", url: "/items/gear.html" },
       { type: "items", name: "Angelic Water", url: "/items/waters.html" },
       { type: "items", name: "Fake Water", url: "/items/waters.html" },
-      { type: "nodes", name: "Terradium", url: "nodes/terradiumnodes.html" },
-      { type: "nodes", name: "Cave Block", url: "/nodes/caveblock.html" },
-      { type: "nodes", name: "Protection Blocks", url: "/nodes/protectionblocks.html" },
-      { type: "mapgen", name: "Mapgen", url: "mapgen/index.html" },
-      { type: "mapgen", name: "Frenchylola", url: "mapgen/frenchylola.html" },
-      { type: "mapgen", name: "Kingium", url: "mapgen/kingium.html" },
-      { type: "mapgen", name: "Kadaxium", url: "mapgen/kadaxium.html" },
-      { type: "mapgen", name: "Terradium", url: "mapgen/terradium.html" },
-      { type: "mapgen", name: "Thophion", url: "mapgen/thophion.html" },
-      { type: "mapgen", name: "Skybuildium", url: "mapgen/skybuildium.html" },
-      { type: "mapgen", name: "Albanium", url: "mapgen/albanium.html" },
-      { type: "machines", name: "", url: "machines/.html" },
-      { type: "mods", name: "Terradium", url: "mods/terradium.html" },
-      { type: "mods", name: "Protection", url: "mods/terraprot.html" },
-      { type: "machines", name: "Cobblebreaker", url: "machines/cobblebreaker.html" },
+      { type: "node", name: "Terradium", url: "/nodes/terradiumnodes.html" },
+      { type: "node", name: "Cave Block", url: "/nodes/caveblock.html" },
+      { type: "node", name: "Protection Blocks", url: "/nodes/protectionblocks.html" },
+      { type: "mapgen", name: "Mapgen", url: "/mapgen/index.html" },
+      { type: "mapgen", name: "Frenchylola", url: "/mapgen/frenchylola.html" },
+      { type: "mapgen", name: "Kingium", url: "/mapgen/kingium.html" },
+      { type: "mapgen", name: "Kadaxium", url: "/mapgen/kadaxium.html" },
+      { type: "mapgen", name: "Terradium", url: "/mapgen/terradium.html" },
+      { type: "mapgen", name: "Thophion", url: "/mapgen/thophion.html" },
+      { type: "mapgen", name: "Skybuildium", url: "/mapgen/skybuildium.html" },
+      { type: "mapgen", name: "Albanium", url: "/mapgen/albanium.html" },
+      { type: "machines", name: "", url: "/machines/.html" },
+      { type: "mods", name: "Terradium", url: "/mods/terradium.html" },
+      { type: "mods", name: "Protection", url: "/mods/terraprot.html" },
+      { type: "machines", name: "Cobblebreaker", url: "/machines/cobblebreaker.html" },
       { type: "version", name: "WebsiteVersion", url: "/version.html"},
       { type: "comingsoon", name: "ComingSoon", url: "/comingsoon.html" }
     ];
