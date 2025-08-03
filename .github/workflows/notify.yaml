@@ -2,8 +2,6 @@ name: Notify Discord on pageupdate
 
 on:
   push:
-    paths:
-      - '**/*.md'
 
 jobs:
   notify:
