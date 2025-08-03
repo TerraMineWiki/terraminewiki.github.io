@@ -13,27 +13,39 @@ jobs:
 
       - name: Send Discord message if commit contains "pageupdate"
         run: |
+          echo "📦 SHA actuel : ${{ github.sha }}"
+          echo "📦 SHA précédent : ${{ github.event.before }}"
+          
           commit_message=$(git log -1 --pretty=%B)
-          echo "Message du commit: $commit_message"
+          echo "💬 Message du commit : $commit_message"
 
           if echo "$commit_message" | grep -qi "pageupdate"; then
-            echo "Mot-clé 'pageupdate' détecté. Analyse des fichiers modifiés..."
-            modified_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '\.html' || true)
+            echo "✅ Mot-clé 'pageupdate' détecté."
+
+            # Lister les fichiers .html modifiés entre les deux commits
+            modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.html' || true)
+            echo "📝 Fichiers HTML modifiés : $modified_files"
 
             if [ -z "$modified_files" ]; then
-              echo "Aucun fichier .html modifié. Fin du job."
+              echo "❌ Aucun fichier .html modifié. Fin du job."
               exit 0
             fi
 
             for file in $modified_files; do
               page_url="https://terraminewiki.github.io/$file"
               content="TerraMineWiki Update !\n$commit_message\n$page_url"
-              echo "Envoi vers Discord : $page_url"
+              echo "📤 Envoi vers Discord ➜ $page_url"
+
               curl -H "Content-Type: application/json" \
                    -X POST \
                    -d "{\"content\": \"$content\"}" \
                    "$DISCORD_WEBHOOK"
             done
+          else
+            echo "❌ Mot-clé 'pageupdate' non détecté. Aucune action."
+          fi
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           else
             echo "Aucun mot-clé 'pageupdate' détecté dans le commit. Aucun message envoyé."
           fi
