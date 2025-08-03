@@ -1,35 +1,41 @@
 name: Notify Discord on pageupdate
 
 on:
-  push:
+  push:  # à chaque push
 
 jobs:
   notify:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-- name: Check for "pageupdate" commits and notify Discord
-  run: |
-    commit_message=$(git log -1 --pretty=%B)
-    echo "Dernier message de commit: $commit_message"
-    
-    if echo "$commit_message" | grep -qi "pageupdate"; then
-      echo "Mot-clé détecté, traitement en cours..."
-      modified_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '\.md')
-      for file in $modified_files; do
-        page_url="https://terraminewiki.github.io/${file%.md}.html"
-        content="TerraMineWiki Update !\n$commit_message\n$page_url"
-        echo "Envoi Discord ➜ $page_url"
-        curl -H "Content-Type: application/json" \
-             -X POST \
-             -d "{\"content\": \"$content\"}" \
-             "$DISCORD_WEBHOOK"
-      done
-    else
-      echo "Aucun mot-clé 'pageupdate' trouvé. Rien à faire."
-    fi
-  env:
-    DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Send Discord message if commit contains "pageupdate"
+        run: |
+          commit_message=$(git log -1 --pretty=%B)
+          echo "Message du commit: $commit_message"
 
+          if echo "$commit_message" | grep -qi "pageupdate"; then
+            echo "Mot-clé 'pageupdate' détecté. Analyse des fichiers modifiés..."
+            modified_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '\.html' || true)
+
+            if [ -z "$modified_files" ]; then
+              echo "Aucun fichier .html modifié. Fin du job."
+              exit 0
+            fi
+
+            for file in $modified_files; do
+              page_url="https://terraminewiki.github.io/$file"
+              content="TerraMineWiki Update !\n$commit_message\n$page_url"
+              echo "Envoi vers Discord : $page_url"
+              curl -H "Content-Type: application/json" \
+                   -X POST \
+                   -d "{\"content\": \"$content\"}" \
+                   "$DISCORD_WEBHOOK"
+            done
+          else
+            echo "Aucun mot-clé 'pageupdate' détecté dans le commit. Aucun message envoyé."
+          fi
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
