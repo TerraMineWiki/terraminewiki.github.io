@@ -10,18 +10,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check for "pageupdate" commits and notify Discord
-        run: |
-          commit_message=$(git log -1 --pretty=%B)
-          if echo "$commit_message" | grep -qi "pageupdate"; then
-            modified_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '\.md')
-            for file in $modified_files; do
-              filename=$(basename "$file")
-              page_url="https://terraminewiki.github.io/${file%.md}.html"
-              content="TerraMineWiki Update !\n$commit_message\n$page_url"
-              curl -H "Content-Type: application/json" \
-                   -X POST \
-                   -d "{\"content\": \"$content\"}" \
-                   ${{ secrets.DISCORD_WEBHOOK }}
-            done
-          fi
+- name: Check for "pageupdate" commits and notify Discord
+  run: |
+    commit_message=$(git log -1 --pretty=%B)
+    echo "Dernier message de commit: $commit_message"
+    
+    if echo "$commit_message" | grep -qi "pageupdate"; then
+      echo "Mot-clé détecté, traitement en cours..."
+      modified_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '\.md')
+      for file in $modified_files; do
+        page_url="https://terraminewiki.github.io/${file%.md}.html"
+        content="TerraMineWiki Update !\n$commit_message\n$page_url"
+        echo "Envoi Discord ➜ $page_url"
+        curl -H "Content-Type: application/json" \
+             -X POST \
+             -d "{\"content\": \"$content\"}" \
+             "$DISCORD_WEBHOOK"
+      done
+    else
+      echo "Aucun mot-clé 'pageupdate' trouvé. Rien à faire."
+    fi
+  env:
+    DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+
