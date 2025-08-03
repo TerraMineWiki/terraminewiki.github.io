@@ -10,19 +10,28 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # clone complet avec tout l'historique
 
       - name: Send Discord message if commit contains "pageupdate"
         run: |
           echo "📦 SHA actuel : ${{ github.sha }}"
           echo "📦 SHA précédent : ${{ github.event.before }}"
-          
+
           commit_message=$(git log -1 --pretty=%B)
           echo "💬 Message du commit : $commit_message"
 
           if echo "$commit_message" | grep -qi "pageupdate"; then
             echo "✅ Mot-clé 'pageupdate' détecté."
 
-            modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.html' || true)
+            # Vérifie si le SHA précédent est valide
+            if git cat-file -e "${{ github.event.before }}"^{commit} 2>/dev/null; then
+              modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.html' || true)
+            else
+              echo "⚠️ SHA précédent invalide, récupération des fichiers du dernier commit uniquement"
+              modified_files=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '\.html' || true)
+            fi
+
             echo "📝 Fichiers HTML modifiés : $modified_files"
 
             if [ -z "$modified_files" ]; then
@@ -35,7 +44,6 @@ jobs:
               content="TerraMineWiki Update !\n$commit_message\n$page_url"
               echo "📤 Envoi vers Discord ➜ $page_url"
 
-              # Utilisation de printf pour éviter soucis de guillemets dans JSON
               payload=$(printf '{"content": "%s"}' "$content")
 
               curl -H "Content-Type: application/json" \
